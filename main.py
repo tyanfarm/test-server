@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from pydantic import BaseModel
 import logging 
 from typing import Dict 
@@ -22,7 +22,7 @@ mock_db: Dict[str, UserInfo] = {}
 
 @app.post("/user")
 def update_user_data(request: UserInfo):
-    # Update user data in the mock database.
+    # Update user data in the mock database.    
     if request.email not in mock_db:
         mock_db[request.email] = request
         return {"message": "User created successfully."}
@@ -36,7 +36,7 @@ def update_user_data(request: UserInfo):
 @app.get("/user")
 def get_user_data(email: str = Query):
     if email not in mock_db:
-        return {"User not found"}
+        raise HTTPException(status_code=404, detail="User not found.")
     
     user = mock_db[email]
     return user
