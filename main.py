@@ -11,13 +11,14 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-# Mock db
-mock_db: Dict[str, Dict] = {}
 
 class UserInfo(BaseModel):
     name: str
     email: str
     data: str = ""
+    
+# Mock db
+mock_db: Dict[str, UserInfo] = {}
 
 @app.post("/user")
 def update_user_data(request: UserInfo):
@@ -27,7 +28,8 @@ def update_user_data(request: UserInfo):
         return {"message": "User created successfully."}
 
     user = mock_db[request.email]
-    user["data"] += request.data
+    logger.info(f"Updating user data for {user.data }.")
+    user.data += f". {request.data}"
 
     return {"message": "User data updated successfully."}
     
