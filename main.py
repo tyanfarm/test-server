@@ -1,0 +1,44 @@
+from fastapi import FastAPI, Query
+from pydantic import BaseModel
+import logging 
+from typing import Dict 
+
+logging.basicConfig(
+    level=logging.INFO,  # Level log (INFO, DEBUG, WARNING, ERROR, CRITICAL)
+    format="%(asctime)s - %(levelname)s - %(message)s" 
+)
+logger = logging.getLogger(__name__)  
+
+app = FastAPI()
+
+# Mock db
+mock_db: Dict[str, Dict] = {}
+
+class UserInfo(BaseModel):
+    name: str
+    email: str
+    data: str = ""
+
+@app.post("/user")
+def update_user_data(request: UserInfo):
+    # Update user data in the mock database.
+    if request.email not in mock_db:
+        mock_db[request.email] = request
+        return {"message": "User created successfully."}
+
+    user = mock_db[request.email]
+    user["data"] += request.data
+
+    return {"message": "User data updated successfully."}
+    
+@app.get("/user")
+def get_user_data(email: str = Query):
+    if email not in mock_db:
+        return {"User not found"}
+    
+    user = mock_db[email]
+    return user
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
