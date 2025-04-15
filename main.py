@@ -22,7 +22,7 @@ mock_db: Dict[str, UserInfo] = {}
 
 @app.post("/user")
 def update_user_data(request: UserInfo):
-    if request.email is None or request.name is None:
+    if request.email == "" or request.name == "":
         raise HTTPException(status_code=400, detail="Email and name are required.")
     
     # Update user data in the mock database.    
