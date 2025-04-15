@@ -28,7 +28,7 @@ def update_user_data(request: UserInfo):
     # Update user data in the mock database.    
     if request.email not in mock_db:
         mock_db[request.email] = request
-        return {f"message": "User created successfully. Email: {request.email}, Name: {request.name}, Note: {request.data}"}
+        return {"message": f"User created successfully. Email: {request.email}, Name: {request.name}, Note: {request.data}"}
 
     user = mock_db[request.email]
     logger.info(f"Updating user data for {user.data }.")
