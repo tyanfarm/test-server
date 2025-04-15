@@ -25,6 +25,9 @@ def update_user_data(request: UserInfo):
     if request.email == "" or request.name == "":
         raise HTTPException(status_code=400, detail="Email and name are required.")
     
+    if request.data == "":
+        raise HTTPException(status_code=400, detail="Data is required.")
+    
     # Update user data in the mock database.    
     if request.email not in mock_db:
         mock_db[request.email] = request
