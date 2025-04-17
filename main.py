@@ -37,7 +37,7 @@ def update_user_data(request: UserInfo):
     logger.info(f"Updating user data for {user.data }.")
     user.data += f". {request.data}"
 
-    return {"message": "User data updated successfully."}
+    return {"message": f"User data updated successfully. Email: {request.email}, Name: {request.name}, Note: {request.data}"}
     
 @app.get("/user")
 def get_user_data(email: str = Query):
